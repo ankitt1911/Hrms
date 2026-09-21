@@ -1,0 +1,45 @@
+{
+  "name": "smart-hrms-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart HRMS modular MongoDB backend",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node --check src/server.js && node -e \"require('./src/app'); require('./src/modules/business/scheduler')\"",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "seed:admin": "node scripts/seed/bootstrap.js",
+    "seed:demo": "node scripts/seed/demo.js",
+    "db:indexes": "node scripts/maintenance/sync-indexes.js",
+    "db:migrate:candidates": "node scripts/maintenance/migrate-candidate-workflow.js",
+    "db:migrate:dashboard": "node scripts/maintenance/migrate-dashboard-attribution.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "argon2": "^0.44.0",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-mongo-sanitize": "^2.2.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0",
+    "multer": "^2.0.2",
+    "nanoid": "^5.1.5",
+    "node-cron": "^4.6.0",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "eslint": "^9.35.0",
+    "mongodb-memory-server": "^10.2.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4",
+    "vitest": "^5.0.0"
+  }
+}

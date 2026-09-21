@@ -1,0 +1,13 @@
+const { z } = require('zod');
+const { objectId } = require('../../common/utils/objectId');
+const password = z.string().min(10).max(128).regex(/[a-z]/, 'must contain a lowercase letter').regex(/[A-Z]/, 'must contain an uppercase letter').regex(/[0-9]/, 'must contain a number');
+const login = z.object({ body: z.object({ email: z.email(), password: z.string().min(1).max(128), deviceId: z.string().max(200).optional() }).strict(), query: z.any(), params: z.any() });
+const refresh = z.object({ body: z.object({ refreshToken: z.string().min(40).max(500) }), query: z.any(), params: z.any() });
+const forgot = z.object({ body: z.object({ email: z.email() }).strict(), query: z.any(), params: z.any() });
+const reset = z.object({ body: z.object({ token: z.string().min(32), newPassword: password }), query: z.any(), params: z.any() });
+const change = z.object({ body: z.object({ currentPassword: z.string().min(1), newPassword: password }), query: z.any(), params: z.any() });
+const sessionId = z.object({ body: z.any(), query: z.any(), params: z.object({ id: objectId }) });
+const profile = z.object({ body: z.object({ displayName: z.string().trim().min(1).max(150).optional() }).strict(), query: z.any(), params: z.any() });
+const requestOtp = z.object({ body: z.object({ email: z.email() }).strict(), query: z.any(), params: z.any() });
+const verifyOtp = z.object({ body: z.object({ email: z.email(), code: z.string().regex(/^\d{6}$/) }).strict(), query: z.any(), params: z.any() });
+module.exports = { login, refresh, forgot, reset, change, sessionId, profile, requestOtp, verifyOtp, password };

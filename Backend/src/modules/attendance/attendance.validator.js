@@ -1,0 +1,7 @@
+const { z } = require('zod');
+const { objectId } = require('../../common/utils/objectId');
+const empty = z.object({ body: z.object({}).optional().default({}), query: z.any(), params: z.any() });
+const history = z.object({ body: z.any(), params: z.any(), query: z.object({ from: z.iso.date().optional(), to: z.iso.date().optional(), page: z.coerce.number().int().positive().optional(), limit: z.coerce.number().int().positive().max(100).optional() }).refine((q) => !q.from || !q.to || q.to >= q.from, { path: ['to'], message: 'to must be on or after from' }) });
+const adminList = z.object({ body: z.any(), params: z.any(), query: z.object({ date: z.iso.date().optional(), from: z.iso.date().optional(), to: z.iso.date().optional(), employeeId: objectId.optional(), status: z.enum(['NOT_STARTED', 'WORKING', 'ON_BREAK', 'COMPLETED']).optional(), page: z.coerce.number().int().positive().optional(), limit: z.coerce.number().int().positive().max(100).optional() }) });
+const correction = z.object({ body: z.object({ expectedVersion: z.number().int().nonnegative(), reason: z.string().trim().min(3).max(1000), segments: z.array(z.object({ type: z.enum(['WORK', 'BREAK']), startedAt: z.iso.datetime(), endedAt: z.iso.datetime() }).refine((s) => s.endedAt > s.startedAt, { path: ['endedAt'], message: 'must be after startedAt' })).min(1).max(50), status: z.literal('COMPLETED').default('COMPLETED') }).strict(), query: z.any(), params: z.object({ id: objectId }) });
+module.exports = { empty, history, adminList, correction };

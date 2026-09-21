@@ -1,0 +1,21 @@
+import { AssignCrmCandidateProfilesApi, CreateCrmCandidateApi, CreateCrmCandidateProfileApi, CrmCandidateApi, CrmCandidateHistoryApi, CrmCandidateProfileApi, CrmCandidateProfilesApi, CrmCandidatesApi, CrmMonitoringAnalyticsApi, CrmMonitoringApi, CrmMonitoringDrilldownApi, SubmitCrmCandidateProfileApi, TransitionCrmCandidateStageApi, UpdateCrmCandidateApi, UpdateCrmCandidateInterviewApi, UpdateCrmCandidateProfileApi, UpdateCrmCandidateRecruiterApi } from "../apiMethod";
+import { toData, toResult } from "./responseHandlers";
+
+export const handleGetCrmCandidates = (params) => toData(CrmCandidatesApi(params));
+export const handleCreateCrmCandidate = (params) => toResult(CreateCrmCandidateApi(params));
+export const handleGetCrmCandidate = (id) => toData(CrmCandidateApi(id));
+export const handleUpdateCrmCandidate = (id, params) => toResult(UpdateCrmCandidateApi(id, params));
+export const handleTransitionCrmCandidateStage = (id, params) => toResult(TransitionCrmCandidateStageApi(id, params));
+export const handleUpdateCrmCandidateInterview = (id, params) => toResult(UpdateCrmCandidateInterviewApi(id, params));
+export const handleUpdateCandidateStage = handleTransitionCrmCandidateStage;
+export const handleGetCrmCandidateHistory = (id) => toData(CrmCandidateHistoryApi(id));
+export const handleUpdateCrmCandidateRecruiter = (id, params) => toResult(UpdateCrmCandidateRecruiterApi(id, params));
+export const handleGetCrmCandidateProfiles = (params) => toData(CrmCandidateProfilesApi(params));
+export const handleCreateCrmCandidateProfile = (params) => toResult(CreateCrmCandidateProfileApi(params));
+export const handleGetCrmCandidateProfile = (id) => toData(CrmCandidateProfileApi(id));
+export const handleUpdateCrmCandidateProfile = (id, params) => toResult(UpdateCrmCandidateProfileApi(id, params));
+export const handleAssignCrmCandidateProfiles = (params) => toResult(AssignCrmCandidateProfilesApi(params));
+export const handleSubmitCrmCandidateProfile = (id, params) => toResult(SubmitCrmCandidateProfileApi(id, params));
+export const handleGetCrmMonitoring = (params) => toData(CrmMonitoringApi(params));
+export const handleGetCrmAnalytics = (params) => toData(CrmMonitoringAnalyticsApi(params));
+export const handleGetCrmDrilldown = (params) => toData(CrmMonitoringDrilldownApi(params));

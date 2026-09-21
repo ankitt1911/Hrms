@@ -1,0 +1,11 @@
+const { z } = require('zod');
+const { objectId } = require('../../common/utils/objectId');
+const submit = z.object({ body: z.object({ leaveTypeId: objectId, startDate: z.iso.date(), endDate: z.iso.date(), reason: z.string().trim().max(1000).optional(), attachmentDocumentId: objectId.optional() }).strict().refine((d) => d.endDate >= d.startDate, { path: ['endDate'], message: 'must be on or after startDate' }), query: z.any(), params: z.any() });
+const queryFields = { page: z.coerce.number().int().positive().optional(), limit: z.coerce.number().int().positive().max(100).optional(), status: z.enum(['PENDING', 'APPROVED', 'REJECTED', 'CANCELLED']).optional(), from: z.iso.date().optional(), to: z.iso.date().optional() };
+const list = z.object({ body: z.any(), params: z.any(), query: z.object({ ...queryFields, employeeId: objectId.optional() }) });
+const myList = z.object({ body: z.any(), params: z.any(), query: z.object(queryFields) });
+const decision = z.object({ body: z.object({ note: z.string().trim().max(1000).optional() }).strict(), query: z.any(), params: z.object({ id: objectId }) });
+const rejection = z.object({ body: z.object({ note: z.string().trim().min(3).max(1000) }).strict(), query: z.any(), params: z.object({ id: objectId }) });
+const cancel = z.object({ body: z.object({ reason: z.string().trim().min(3).max(1000) }).strict(), query: z.any(), params: z.object({ id: objectId }) });
+const leaveTypeCreate = z.object({ body: z.object({ name: z.string().trim().min(1).max(100), isPaid: z.boolean().default(true) }).strict(), query: z.any(), params: z.any() });
+module.exports = { submit, list, myList, decision, rejection, cancel, leaveTypeCreate };

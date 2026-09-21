@@ -1,0 +1,7 @@
+node_modules
+.git
+.env
+.data
+tests
+*.docx
+SMART_HRMS_BACKEND_BLUEPRINT_MONGODB*.md

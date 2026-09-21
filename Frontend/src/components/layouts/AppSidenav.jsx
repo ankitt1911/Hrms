@@ -1,0 +1,22 @@
+import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Building2, CalendarCheck, CalendarDays, CalendarRange, ChartNoAxesCombined, CircleDollarSign, ClipboardList, FileClock, FileText, Gauge, IdCard, Landmark, Mail, Settings2, ShieldCheck, UserCheck, UserPlus, UserRound, UsersRound, X } from "lucide-react";
+import { ROLES } from "../../constants/roles.constants";
+
+const shared = [{ to: "/dashboard", label: "Overview", icon: Gauge }, { to: "/messages", label: "Messages", icon: Mail }];
+const recruiterSections = [
+  { label: "Workspace", items: [...shared, { to: "/profile", label: "My profile", icon: UserRound }, { to: "/attendance/me", label: "My attendance", icon: CalendarCheck }, { to: "/leave/me", label: "My leave", icon: CalendarDays }, { to: "/payslips/me", label: "My payslips", icon: FileText }, { to: "/documents/me", label: "My documents", icon: FileText }] },
+  { label: "Recruitment", items: [{ to: "/jobs/assigned", label: "Assigned jobs", icon: IdCard }, { to: "/crm/my-candidates", label: "My candidates", icon: ClipboardList }, { to: "/crm/submissions", label: "Submissions", icon: UserPlus }, { to: "/crm/shortlisted", label: "Shortlisted", icon: UserCheck }, { to: "/crm/interview-scheduled", label: "Interview scheduled", icon: CalendarDays }, { to: "/crm/selected", label: "Selected", icon: UserCheck }, { to: "/crm/rejected", label: "Rejected", icon: X }, { to: "/crm/joined", label: "Joined", icon: UsersRound }, { to: "/crm/calendar", label: "Candidate calendar", icon: CalendarRange }, { to: "/crm/my-pipeline", label: "My pipeline", icon: ChartNoAxesCombined }] },
+];
+const ownerSections = [
+  { label: "Workspace", items: [shared[0], { to: "/crm/monitoring", label: "CRM monitor", icon: ChartNoAxesCombined }, shared[1]] },
+  { label: "People operations", items: [{ to: "/employees", label: "Employees", icon: UsersRound }, { to: "/attendance", label: "Attendance", icon: CalendarCheck }, { to: "/leave/queue", label: "Leave queue", icon: CalendarDays }, { to: "/payroll", label: "Payroll", icon: CircleDollarSign }] },
+  { label: "Hiring & finance", items: [{ to: "/vendors", label: "Vendors", icon: Building2 }, { to: "/jobs", label: "Job openings", icon: IdCard }, { to: "/crm/candidate-pool", label: "Candidates", icon: ClipboardList }, { to: "/crm/submissions", label: "Submissions", icon: UserPlus }, { to: "/crm/shortlisted", label: "Shortlisted", icon: UserCheck }, { to: "/crm/interview-scheduled", label: "Interview scheduled", icon: CalendarDays }, { to: "/crm/selected", label: "Selected", icon: UserCheck }, { to: "/crm/rejected", label: "Rejected", icon: X }, { to: "/crm/joined", label: "Joined", icon: UsersRound }, { to: "/crm/candidates", label: "All candidates", icon: ChartNoAxesCombined }, { to: "/crm/calendar", label: "Candidate calendar", icon: CalendarRange }, { to: "/placements", label: "Placements", icon: Landmark }] },
+  { label: "Governance", items: [{ to: "/reports", label: "Reports", icon: FileClock }, { to: "/audit", label: "Audit trail", icon: ShieldCheck }, { to: "/admin/company", label: "Company", icon: Settings2 }] },
+];
+
+export default function AppSidenav({ open, onClose }) {
+  const user = useSelector((state) => state.auth?.user);
+  const sections = user?.role === ROLES.SUPER_ADMIN ? ownerSections : recruiterSections;
+  return <><button type="button" className={`nav-scrim ${open ? "open" : ""}`} onClick={onClose} aria-label="Close navigation" /><aside className={`sidenav ${open ? "open" : ""}`} aria-label="Primary navigation"><div className="brand-mark"><span aria-hidden="true">l</span><div><strong>Ledger</strong><small>Smart HRMS</small></div><button type="button" className="icon-button nav-close" onClick={onClose} aria-label="Close navigation"><X size={19} /></button></div><nav>{sections.map((section) => <div className="nav-section" key={section.label}><p>{section.label}</p>{section.items.map(({ to, label, icon: Icon }) => <NavLink key={to} to={to} title={label} aria-label={label} onClick={onClose} className={({ isActive }) => isActive ? "active" : ""}><Icon size={18} /><span>{label}</span></NavLink>)}</div>)}</nav><div className="sidebar-foot"><span className="avatar avatar--small">{(user?.displayName || user?.email || "U").slice(0, 1).toUpperCase()}</span><div><strong>{user?.displayName || "Team member"}</strong><small>{user?.role?.replaceAll("_", " ")}</small></div></div></aside></>;
+}

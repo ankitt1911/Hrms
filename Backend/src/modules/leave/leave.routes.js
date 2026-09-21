@@ -1,0 +1,15 @@
+const express = require('express');
+const service = require('./leave.service'); const schemas = require('./leave.validator');
+const { success } = require('../../common/http/response'); const { authenticate } = require('../../common/middleware/auth.middleware');
+const { requireSuperAdmin, requireEmployee } = require('../../common/middleware/access.middleware'); const { validate } = require('../../common/middleware/validate.middleware');
+const typeRouter = express.Router(); typeRouter.use(authenticate);
+typeRouter.get('/', async (req, res) => success(res, await service.listTypes(req.actor)));
+typeRouter.post('/', requireSuperAdmin, validate(schemas.leaveTypeCreate), async (req, res) => success(res, await service.createType(req.actor, req.validated.body), 'Leave type created', 201));
+const router = express.Router(); router.use(authenticate);
+router.post('/', requireEmployee, validate(schemas.submit), async (req, res) => success(res, await service.submit(req.actor, req.validated.body), 'Leave request submitted', 201));
+router.get('/me', requireEmployee, validate(schemas.myList), async (req, res) => success(res, await service.list(req.actor, req.validated.query, true)));
+router.get('/', requireSuperAdmin, validate(schemas.list), async (req, res) => success(res, await service.list(req.actor, req.validated.query)));
+router.post('/:id/approve', requireSuperAdmin, validate(schemas.decision), async (req, res) => success(res, await service.decide(req.actor, req.validated.params.id, 'APPROVED', req.validated.body.note), 'Leave approved'));
+router.post('/:id/reject', requireSuperAdmin, validate(schemas.rejection), async (req, res) => success(res, await service.decide(req.actor, req.validated.params.id, 'REJECTED', req.validated.body.note), 'Leave rejected'));
+router.post('/:id/cancel', validate(schemas.cancel), async (req, res) => success(res, await service.cancel(req.actor, req.validated.params.id, req.validated.body.reason), 'Leave cancelled'));
+module.exports = { router, typeRouter };
