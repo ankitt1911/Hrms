@@ -26,6 +26,7 @@ function errorHandler(error, req, res, _next) {
   } else if (error instanceof mongoose.Error.VersionError) mapped = new AppError('CONFLICT', 409, 'Record changed; reload and retry');
 
   const status = mapped instanceof AppError ? mapped.status : 500;
+  if (status === 500) process.stderr.write(`[${req.requestId}] ${req.method} ${req.originalUrl} failed: ${error?.stack || error}\n`);
   res.status(status).json({
     success: false,
     message: status === 500 ? 'An unexpected error occurred' : mapped.message,

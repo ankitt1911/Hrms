@@ -9,6 +9,8 @@ function endOfUtcDay(value = new Date()) {
 }
 
 function isValidTimeZone(timeZone) {
+  // Intl treats undefined as "system default", so it must be rejected explicitly
+  if (typeof timeZone !== 'string' || !timeZone) return false;
   try { new Intl.DateTimeFormat('en', { timeZone }).format(); return true; }
   catch { return false; }
 }
