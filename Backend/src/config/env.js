@@ -23,7 +23,7 @@ const schema = z.object({
   PASSWORD_RESET_TTL_SECONDS: z.coerce.number().int().positive().default(900),
   AUTH_MAX_FAILED_ATTEMPTS: z.coerce.number().int().positive().default(5),
   AUTH_LOCK_MINUTES: z.coerce.number().int().positive().default(15),
-  CORS_ALLOWED_ORIGINS: z.string().default('http://localhost:5173'),
+  CORS_ALLOWED_ORIGINS: z.string().default('https://hrms-six-pied-88.vercel.app'),
   BANK_DATA_ENCRYPTION_KEY: z.string().default('development-only-bank-secret-change-me'),
   EMAIL_PROVIDER: z.string().default('console'),
   EMAIL_FROM: z.string().default('no-reply@example.com'),
