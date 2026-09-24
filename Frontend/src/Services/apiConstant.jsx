@@ -1,4 +1,4 @@
-const apiUserUrlPrefix = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1").replace(/\/$/, "");
+const apiUserUrlPrefix = (import.meta.env.VITE_API_BASE_URL || "https://hrms-6sxu.onrender.com/api/v1").replace(/\/$/, "");
 
 export const apiConstant = Object.freeze({
   healthLive: `${apiUserUrlPrefix}/health/live`,
