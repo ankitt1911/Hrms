@@ -1,3 +1,8 @@
+const path = require('path');
+
+// Load Backend/.env (tests stay isolated from local secrets)
+if (!process.env.VITEST) require('dotenv').config({ path: path.resolve(__dirname, '../../.env'), quiet: true });
+
 const { z } = require('zod');
 
 const schema = z.object({
